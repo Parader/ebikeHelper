@@ -1,0 +1,273 @@
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+@mixin fluid-type($min-vw, $max-vw, $min-font-size, $max-font-size) {
+  $u1: unit($min-vw);
+  $u2: unit($max-vw);
+  $u3: unit($min-font-size);
+  $u4: unit($max-font-size);
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    & {
+      font-size: $min-font-size;
+      @media screen and (min-width: $min-vw) {
+        font-size: calc(
+          #{$min-font-size} + #{strip-unit($max-font-size - $min-font-size)} *
+            ((100vw - #{$min-vw}) / #{strip-unit($max-vw - $min-vw)})
+        );
+      }
+      @media screen and (min-width: $max-vw) {
+        font-size: $max-font-size;
+      }
+    }
+  }
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-size: 22px;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 70px;
+  background: #333;
+
+  padding: 0 calc((100vw - 780px) / 2);
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    margin-left: 11px;
+    height: 100%;
+    .logo {
+      width: 40px;
+      background: #fff;
+      border: 1px solid #333;
+      padding: 6px 6px 4px;
+      border-radius: 4px;
+      margin-right: 11px;
+      position: relative;
+      top: -2px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+}
+
+.home {
+}
+
+.page {
+  .page-cover {
+    height: 400px;
+    overflow: hidden;
+  }
+}
+
+.page-content {
+  margin: auto;
+  max-width: 780px;
+}
+.content {
+  h2 {
+    font-size: 21px;
+    width: 100%;
+    text-align: left;
+    margin: 0 0 22px;
+  }
+}
+.lists {
+  margin-bottom: 44px;
+  padding: 0 11px;
+  .list {
+    padding: 22px 11px 44px;
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2);
+
+    &.learning {
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+87,ffc327+100 */
+      background: rgb(255, 255, 255); /* Old browsers */
+      background: -moz-linear-gradient(
+        top,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(255, 195, 39, 1) 100%
+      ); /* FF3.6-15 */
+      background: -webkit-linear-gradient(
+        top,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(255, 195, 39, 1) 100%
+      ); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(255, 195, 39, 1) 100%
+      ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ffc327',GradientType=0 ); /* IE6-9 */
+    }
+    &.make {
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+87,a4e696+100 */
+      background: rgb(255, 255, 255); /* Old browsers */
+      background: -moz-linear-gradient(
+        top,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(164, 230, 150, 1) 100%
+      ); /* FF3.6-15 */
+      background: -webkit-linear-gradient(
+        top,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(164, 230, 150, 1) 100%
+      ); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(164, 230, 150, 1) 100%
+      ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#a4e696',GradientType=0 ); /* IE6-9 */
+    }
+    &.buy {
+      /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+87,068587+100 */
+      background: rgb(255, 255, 255); /* Old browsers */
+      background: -moz-linear-gradient(
+        top,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(6, 133, 135, 1) 100%
+      ); /* FF3.6-15 */
+      background: -webkit-linear-gradient(
+        top,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(6, 133, 135, 1) 100%
+      ); /* Chrome10-25,Safari5.1-6 */
+      background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1) 87%,
+        rgba(6, 133, 135, 1) 100%
+      ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#068587',GradientType=0 ); /* IE6-9 */
+    }
+    h2 {
+      font-size: 19px;
+      width: 100%;
+      text-align: left;
+      margin: 0 0 22px;
+    }
+    h3 {
+      font-size: 17px;
+      margin: 0;
+      padding-left: 5px;
+      font-weight: 500;
+    }
+    ul {
+      width: 100%;
+      padding: 0;
+      margin: 5px 0 11px;
+      li {
+        width: 100%;
+      }
+    }
+    .card {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      margin: 0 0 2px;
+      box-shadow: none;
+      border-bottom: 1px solid #ccc;
+      border-radius: 5px;
+      transition: all 200ms ease-out;
+      color: #000;
+      &:hover {
+        background: #fcfcfc;
+        color: #039be5;
+      }
+      .background {
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        right: 0;
+        bottom: 0;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-grow: 1;
+        &.diy {
+          background-image: url('../images/diy-bike.jpg');
+        }
+      }
+      .label {
+        width: 100%;
+        font-size: 14px;
+        padding: 5px 11px;
+      }
+    }
+    .table {
+    }
+  }
+}
+
+.page-content {
+  .heading {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    padding: 0 22px;
+    .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      z-index: 0;
+      &.diy {
+        background-image: url('../images/diy-bike.jpg');
+      }
+    }
+    .title {
+      position: relative;
+      z-index: 1;
+      font-size: 30px;
+      color: #fff;
+      margin: 0;
+      font-weight: bold;
+      text-shadow: 0px 1px 25px rgba(0, 0, 0, 0.5);
+    }
+  }
+  .content {
+    .collapsible {
+      box-shadow: none;
+      .collapsible-header {
+      }
+      .collapsible-body {
+        padding: 11px 11px 44px;
+        h3 {
+          @include fluid-type(320px, 760px, 20px, 22px);
+        }
+        p {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
