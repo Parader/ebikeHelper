@@ -5,6 +5,13 @@ import Img from 'gatsby-image'
 
 import Layout from '../components/layout'
 
+const times = x => f => {
+  if (x > 0) {
+    f()
+    times(x - 1)(f)
+  }
+}
+
 class PageTemplate extends React.Component {
   constructor(props) {
     super(props)
@@ -18,18 +25,18 @@ class PageTemplate extends React.Component {
 
   replaceLinks() {
     const links = this.content.current.getElementsByTagName('a')
-
     if (links.length > 0) {
-      for (let i = 0; i < links.length; i++) {
-        const elm = document.createElement('span')
-        let link = links[i]
+      let elm, link, parent
+      times(links.length)(() => {
+        link = links[0]
+        parent = link.parentElement
+        elm = document.createElement('span')
         link.parentElement.insertBefore(elm, link)
-        link.remove()
-
+        parent.removeChild(link)
         if (!link.attributes.target) {
           this.renderLink(elm, link.attributes.href.value, link.text)
         }
-      }
+      })
     }
   }
 
@@ -38,8 +45,8 @@ class PageTemplate extends React.Component {
     const imgs = this.content.current.getElementsByTagName('figure')
 
     if (imgs.length > 0) {
-      for (let i = 0; i < imgs.length; i++) {
-        const img = imgs[i]
+      times(imgs.length)(() => {
+        const img = imgs[0]
         const imgUrl = img.attributes[0].value
         const imgName = imgUrl.substring(
           imgUrl.lastIndexOf('/') + 1,
@@ -51,12 +58,10 @@ class PageTemplate extends React.Component {
         const elm = document.createElement('span')
 
         img.parentElement.insertBefore(elm, img)
-        // img.remove()
+        img.remove()
 
         this.renderImage(elm, fluidImage)
-
-        //console.log(img)
-      }
+      })
     }
   }
 
