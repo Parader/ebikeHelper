@@ -39,7 +39,7 @@ module.exports = {
         verboseOutput: true,
         jwt_user: process.env.JWT_USER,
         jwt_pass: process.env.JWT_PASSWORD,
-        //includedRoutes: ['/*/*/posts', '/*/*/pages', '/*/*/media'],
+        includedRoutes: ['/*/*/posts', '/*/*/pages', '/*/*/media'],
       },
     },
     'gatsby-plugin-offline',
