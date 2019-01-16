@@ -65,6 +65,7 @@ exports.createPages = ({ graphql, actions }) => {
           },
         })
       })
+      resolve()
     })
     // ==== END PAGES ====
 
