@@ -26,29 +26,35 @@ workbox.clientsClaim();
  */
 self.__precacheManifest = [
   {
-    "url": "webpack-runtime-83ac47c1e71fe183ca7b.js"
+    "url": "webpack-runtime-576db840580518745434.js"
   },
   {
-    "url": "app-2e7128460cc7b8fa742c.js"
+    "url": "app-45b8e82edf5002af0524.js"
   },
   {
-    "url": "component---node-modules-gatsby-plugin-offline-app-shell-js-0d5e6f4c41eb17bc3fb8.js"
+    "url": "component---node-modules-gatsby-plugin-offline-app-shell-js-fcf9b870675ab4386cae.js"
   },
   {
     "url": "offline-plugin-app-shell-fallback/index.html",
-    "revision": "b7d55728095a47a8618c6492b39563e1"
+    "revision": "1ef66df3217960331f74fd6d74b6a0fb"
   },
   {
-    "url": "0.d1bb97e53c9e01898263.css"
+    "url": "0.71d3fd5a62cb4e571cba.css"
   },
   {
-    "url": "component---src-pages-404-js.3f87807154bca0a1d314.css"
+    "url": "1.1b30a3cf08adc1f425ff.css"
   },
   {
-    "url": "component---src-pages-404-js-adebc068afe37fd1e215.js"
+    "url": "component---src-pages-404-js-fc970be3798450c08f1d.js"
   },
   {
-    "url": "0-f81f5c684130837a3209.js"
+    "url": "0-a847d1505a6a3aa53519.js"
+  },
+  {
+    "url": "2-475a5fa6e874e56f1d21.js"
+  },
+  {
+    "url": "1-f0008b0ce36684d8b28c.js"
   },
   {
     "url": "static/d/164/path---404-html-516-62a-NZuapzHg3X9TaN1iIixfv1W23E.json",
@@ -60,45 +66,102 @@ self.__precacheManifest = [
   },
   {
     "url": "manifest.webmanifest",
-    "revision": "a1e9839c7f587acffc0c7add26deaa67"
+    "revision": "ad0af52635af9d02052c8283ab644697"
   }
 ].concat(self.__precacheManifest || []);
 workbox.precaching.suppressWarnings();
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute("/offline-plugin-app-shell-fallback/index.html", {
-  whitelist: [/^([^.?]*|[^?]*\.([^.?]{5,}|html))(\?.*)?$/],
-  blacklist: [/\?(.+&)?no-cache=1$/],
-});
-
-workbox.routing.registerRoute(/\.(?:png|jpg|jpeg|webp|svg|gif|tiff|js|woff|woff2|json|css)$/, workbox.strategies.staleWhileRevalidate(), 'GET');
-workbox.routing.registerRoute(/^https?:/, workbox.strategies.networkFirst(), 'GET');
+workbox.routing.registerRoute(/(\.js$|\.css$|\/static\/)/, workbox.strategies.cacheFirst(), 'GET');
+workbox.routing.registerRoute(/^https?:.*\.(png|jpg|jpeg|webp|svg|gif|tiff|js|woff|woff2|json|css)$/, workbox.strategies.staleWhileRevalidate(), 'GET');
+workbox.routing.registerRoute(/^https?:\/\/fonts\.googleapis\.com\/css/, workbox.strategies.staleWhileRevalidate(), 'GET');
 "use strict";
 
-/* global workbox */
-self.addEventListener("message", function (event) {
-  var api = event.data.api;
+/* global importScripts, workbox, idbKeyval */
+importScripts("idb-keyval-iife.min.js");
+var WHITELIST_KEY = "custom-navigation-whitelist";
+var navigationRoute = new workbox.routing.NavigationRoute(function (_ref) {
+  var event = _ref.event;
 
-  if (api === "gatsby-runtime-cache") {
-    var resources = event.data.resources;
-    var cacheName = workbox.core.cacheNames.runtime;
-    event.waitUntil(caches.open(cacheName).then(function (cache) {
-      return Promise.all(resources.map(function (resource) {
-        var request; // Some external resources don't allow
-        // CORS so get an opaque response
+  var _ref2 = new URL(event.request.url),
+      pathname = _ref2.pathname;
 
-        if (resource.match(/^https?:/)) {
-          request = fetch(resource, {
-            mode: "no-cors"
-          });
-        } else {
-          request = fetch(resource);
-        }
+  return idbKeyval.get(WHITELIST_KEY).then(function (customWhitelist) {
+    if (customWhitelist === void 0) {
+      customWhitelist = [];
+    }
 
-        return request.then(function (response) {
-          return cache.put(resource, response);
-        });
-      }));
-    }));
+    // Respond with the offline shell if we match the custom whitelist
+    if (customWhitelist.includes(pathname)) {
+      var offlineShell = "/offline-plugin-app-shell-fallback/index.html";
+      var cacheName = workbox.core.cacheNames.precache;
+      return caches.match(offlineShell, {
+        cacheName: cacheName
+      });
+    }
+
+    return fetch(event.request);
+  });
+});
+workbox.routing.registerRoute(navigationRoute);
+var updatingWhitelist = null;
+
+function rawWhitelistPathnames(pathnames) {
+  if (updatingWhitelist !== null) {
+    // Prevent the whitelist from being updated twice at the same time
+    return updatingWhitelist.then(function () {
+      return rawWhitelistPathnames(pathnames);
+    });
   }
+
+  updatingWhitelist = idbKeyval.get(WHITELIST_KEY).then(function (customWhitelist) {
+    if (customWhitelist === void 0) {
+      customWhitelist = [];
+    }
+
+    pathnames.forEach(function (pathname) {
+      if (!customWhitelist.includes(pathname)) customWhitelist.push(pathname);
+    });
+    return idbKeyval.set(WHITELIST_KEY, customWhitelist);
+  }).then(function () {
+    updatingWhitelist = null;
+  });
+  return updatingWhitelist;
+}
+
+function rawResetWhitelist() {
+  if (updatingWhitelist !== null) {
+    return updatingWhitelist.then(function () {
+      return rawResetWhitelist();
+    });
+  }
+
+  updatingWhitelist = idbKeyval.set(WHITELIST_KEY, []).then(function () {
+    updatingWhitelist = null;
+  });
+  return updatingWhitelist;
+}
+
+var messageApi = {
+  whitelistPathnames: function whitelistPathnames(event) {
+    var pathnames = event.data.pathnames;
+    pathnames = pathnames.map(function (_ref3) {
+      var pathname = _ref3.pathname,
+          includesPrefix = _ref3.includesPrefix;
+
+      if (!includesPrefix) {
+        return "" + pathname;
+      } else {
+        return pathname;
+      }
+    });
+    event.waitUntil(rawWhitelistPathnames(pathnames));
+  },
+  resetWhitelist: function resetWhitelist(event) {
+    event.waitUntil(rawResetWhitelist());
+  }
+};
+self.addEventListener("message", function (event) {
+  var gatsbyApi = event.data.gatsbyApi;
+  if (gatsbyApi) messageApi[gatsbyApi](event);
 });
