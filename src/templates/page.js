@@ -3,7 +3,9 @@ import { Link } from 'gatsby'
 import ReactDOM from 'react-dom'
 import Img from 'gatsby-image'
 
-import Layout from '../components/layout'
+import { Layout, Menu, Breadcrumb } from 'antd'
+
+const { Header, Content, Footer } = Layout
 
 const times = x => f => {
   if (x > 0) {
@@ -96,8 +98,8 @@ class PageTemplate extends React.Component {
     const content = this.swapFigures()
 
     return (
-      <Layout>
-        <div className={`page ${currentPage.slug}`}>
+      <div className={`page ${currentPage.slug}`}>
+        <Content className="content-wrapper">
           {hasCover && (
             <div className="page-cover">
               <Img
@@ -118,6 +120,12 @@ class PageTemplate extends React.Component {
               </div>
             </div>
           )}
+
+          <Breadcrumb className="breadcrumb">
+            <Breadcrumb.Item>Home</Breadcrumb.Item>
+            <Breadcrumb.Item>List</Breadcrumb.Item>
+            <Breadcrumb.Item>App</Breadcrumb.Item>
+          </Breadcrumb>
           <div className="page-content">
             <h1 dangerouslySetInnerHTML={{ __html: currentPage.title }} />
             <div
@@ -125,8 +133,8 @@ class PageTemplate extends React.Component {
               dangerouslySetInnerHTML={{ __html: content }}
             />
           </div>
-        </div>
-      </Layout>
+        </Content>
+      </div>
     )
   }
 }

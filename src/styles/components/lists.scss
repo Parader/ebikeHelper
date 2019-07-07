@@ -1,0 +1,75 @@
+.lists {
+  margin-bottom: 44px;
+  padding: 0 11px;
+  .list {
+    padding: 22px 11px 44px;
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.2);
+
+    &.learning {
+    }
+    &.make {
+    }
+    &.buy {
+    }
+    h2 {
+      font-size: 19px;
+      width: 100%;
+      text-align: left;
+      margin: 0 0 22px;
+    }
+    h3 {
+      font-size: 17px;
+      margin: 0;
+      padding-left: 5px;
+      font-weight: 500;
+    }
+    ul {
+      width: 100%;
+      padding: 0;
+      margin: 5px 0 11px;
+      li {
+        width: 100%;
+      }
+    }
+    .card {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      margin: 0 0 2px;
+      box-shadow: none;
+      border-bottom: 1px solid #ccc;
+      border-radius: 5px;
+      transition: all 200ms ease-out;
+      color: #000;
+      &:hover {
+        background: #fcfcfc;
+        color: #039be5;
+      }
+      .background {
+        position: absolute;
+        width: 100px;
+        height: 50px;
+        right: 0;
+        bottom: 0;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        display: flex;
+        flex-grow: 1;
+        &.diy {
+          background-image: url('../images/diy-bike.jpg');
+        }
+      }
+      .label {
+        width: 100%;
+        font-size: 14px;
+        padding: 5px 11px;
+      }
+    }
+    .table {
+    }
+  }
+}
