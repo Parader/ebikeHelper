@@ -16,7 +16,7 @@
     "gatsby-transformer-sharp": "^2.1.8",
     "html-react-parser": "^0.4.7",
     "materialize-css": "^1.0.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
